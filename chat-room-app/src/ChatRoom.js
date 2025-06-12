@@ -13,7 +13,9 @@ export default function ChatRoom() {
   const socketRef = useRef();
 
   useEffect(() => {
-    socketRef.current = io(SOCKET_SERVER_URL);
+    socketRef.current = io(SOCKET_SERVER_URL, {
+      transports: ["websocket"],
+    });
 
     socketRef.current.emit("joinRoom", roomId);
 
