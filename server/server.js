@@ -5,10 +5,12 @@ const { Server } = require("socket.io");
 const app = express();
 const server = http.createServer(app);
 
-const io = new Server(server, {
-  cors: { origin: "*" }, // Allow all origins during development
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "https://rolesphere-web-int-frontend.onrender.com", // replace with actual frontend URL
+    methods: ["GET", "POST"],
+  },
 });
-
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 

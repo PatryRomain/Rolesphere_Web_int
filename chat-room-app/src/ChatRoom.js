@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { io } from "socket.io-client";
 import { UserContext } from "./UserContext";
 
-const SOCKET_SERVER_URL = "http://localhost:4000";
+const SOCKET_SERVER_URL = "https://rolesphere-web-int.onrender.com";
 
 export default function ChatRoom() {
   const { user } = useContext(UserContext);
