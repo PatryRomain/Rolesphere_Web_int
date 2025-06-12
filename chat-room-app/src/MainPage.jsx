@@ -2,14 +2,28 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
 
-
 export default function MainPage() {
   const { user, logout } = useContext(UserContext);
+
+  // Preloaded fantasy/sci-fi themed chat rooms for Rolesphere
   const [chatRooms, setChatRooms] = useState([
-    { id: 1, name: "Tech Talk", tags: ["tech", "coding"] },
-    { id: 2, name: "Gaming Zone", tags: ["games", "fun"] },
-    { id: 3, name: "Study Lounge", tags: ["study", "quiet"] },
+    { id: 1, name: "The Last Troll", tags: ["fantasy", "troll", "survival"] },
+    { id: 2, name: "Slow-Burn Romance in the Postapocalypse", tags: ["romance", "post-apocalyptic", "drama"] },
+    { id: 3, name: "A Tale of Two Rat Brothers", tags: ["surreal", "historical", "rats", "steampunk"] },
+    { id: 4, name: "Starbound Courtship Rituals", tags: ["sci-fi", "romance", "aliens"] },
+    { id: 5, name: "Beneath the Oracle's Teeth", tags: ["myth", "mystery", "ancient"] },
+    { id: 6, name: "Clockwork Hearts and Velvet Rebellions", tags: ["steampunk", "rebellion", "romance"] },
+    { id: 7, name: "When Shadows Dream of Snow", tags: ["gothic", "dreamlike", "fantasy"] },
+    { id: 8, name: "Post-Crisis Paranormal Boarding School", tags: ["school", "magic", "drama"] },
+    { id: 9, name: "The Kingdom of Glass and Honey", tags: ["fantasy", "court intrigue", "sweet"] },
+    { id: 10, name: "Cyberjunk Confessional", tags: ["cyberpunk", "dystopia", "introspective"] },
+    { id: 11, name: "Ruins of the Whispering Age", tags: ["post-apocalyptic", "mystery", "exploration"] },
+    { id: 12, name: "Echoes of the Fallen Moon", tags: ["epic", "fantasy", "tragedy"] },
+    { id: 13, name: "Ex-Lovers at the Edge of Time", tags: ["sci-fi", "drama", "romance"] },
+    { id: 14, name: "Plague Circus Chronicles", tags: ["dark fantasy", "plague", "carnival"] },
+    { id: 15, name: "Covenant of Thorns and Laughter", tags: ["witches", "dark comedy", "magic"] }
   ]);
+
   const [newRoomName, setNewRoomName] = useState("");
   const [newRoomTags, setNewRoomTags] = useState("");
 
@@ -18,7 +32,7 @@ export default function MainPage() {
 
   const navigate = useNavigate();
 
-  // Create new room handler
+  // Handle room creation
   const handleCreateRoom = (e) => {
     e.preventDefault();
     if (!newRoomName.trim()) return;
@@ -34,12 +48,12 @@ export default function MainPage() {
     setNewRoomTags("");
   };
 
-  // Get unique tags from all rooms
+  // Extract all unique tags
   const allTags = Array.from(
     new Set(chatRooms.flatMap((room) => room.tags))
   ).sort();
 
-  // Toggle tag selection
+  // Tag selection toggle
   const toggleTag = (tag) => {
     if (selectedTags.includes(tag)) {
       setSelectedTags(selectedTags.filter((t) => t !== tag));
@@ -48,7 +62,7 @@ export default function MainPage() {
     }
   };
 
-  // Filter chat rooms based on search text and selected tags
+  // Filter chat rooms by search and tag
   const filteredRooms = chatRooms.filter((room) => {
     const matchesText = room.name.toLowerCase().includes(searchText.toLowerCase());
     const matchesTags =
@@ -59,26 +73,29 @@ export default function MainPage() {
 
   return (
     <div style={styles.page}>
+      {/* Header with Rolesphere branding */}
       <header style={styles.header}>
-        <h1>Chat Rooms</h1>
         <div>
-         {user ? (
-        <>
-            Hello, {user.name}{" "}
-           <button onClick={logout} style={styles.logoutButton}>
-               Logout
-           </button>
-         </>
-        ) : 
-        ("Not logged in")}
+          <h1 style={{ fontSize: 28, fontWeight: "bold" }}>Rolesphere</h1>
+          <span style={{ fontSize: 14, color: "#ccc" }}>RP Chat Rooms</span>
         </div>
-
+        <div>
+          {user ? (
+            <>
+              Hello, {user.name}{" "}
+              <button onClick={logout} style={styles.logoutButton}>
+                Logout
+              </button>
+            </>
+          ) : (
+            "Not logged in"
+          )}
+        </div>
       </header>
 
       <div style={styles.content}>
-        {/* Left panel */}
+        {/* Chat room list + filters */}
         <section style={styles.leftPanel}>
-          {/* Search bar */}
           <input
             type="text"
             placeholder="Search rooms..."
@@ -87,7 +104,7 @@ export default function MainPage() {
             style={styles.searchInput}
           />
 
-          {/* Tag filters */}
+          {/* Tags */}
           <div style={styles.tagFilter}>
             {allTags.map((tag) => (
               <button
@@ -95,7 +112,7 @@ export default function MainPage() {
                 onClick={() => toggleTag(tag)}
                 style={{
                   ...styles.tagButton,
-                  backgroundColor: selectedTags.includes(tag) ? "#007bff" : "#e0e0e0",
+                  backgroundColor: selectedTags.includes(tag) ? "#6a4fb3" : "#e0e0e0",
                   color: selectedTags.includes(tag) ? "white" : "black",
                 }}
               >
@@ -106,7 +123,7 @@ export default function MainPage() {
 
           <h2>Available Chat Rooms</h2>
 
-          {/* Create new room form */}
+          {/* Room creation form */}
           <form onSubmit={handleCreateRoom} style={{ marginBottom: 20 }}>
             <input
               type="text"
@@ -127,6 +144,7 @@ export default function MainPage() {
             </button>
           </form>
 
+          {/* Display rooms */}
           {filteredRooms.map((room) => (
             <div
               key={room.id}
@@ -146,7 +164,7 @@ export default function MainPage() {
           {filteredRooms.length === 0 && <p>No chat rooms found.</p>}
         </section>
 
-        {/* Right sidebar */}
+        {/* Sidebar list of all rooms */}
         <aside style={styles.sidebar}>
           <h3>All Chat Rooms</h3>
           <ul style={styles.sidebarList}>
@@ -160,12 +178,17 @@ export default function MainPage() {
               </li>
             ))}
           </ul>
+          {/* Rolesphere footer branding */}
+          <div style={{ marginTop: 40, fontSize: 12, color: "#888" }}>
+            Powered by <strong>Rolesphere</strong>
+          </div>
         </aside>
       </div>
     </div>
   );
 }
 
+// Rolesphere-inspired styles
 const styles = {
   page: {
     display: "flex",
@@ -176,11 +199,20 @@ const styles = {
   header: {
     flexShrink: 0,
     padding: "10px 20px",
-    backgroundColor: "#282c34",
+    backgroundColor: "#2e1f4d", // Deep purple for branding
     color: "white",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  logoutButton: {
+    marginLeft: 10,
+    padding: "6px 12px",
+    backgroundColor: "#ff4d4d",
+    color: "white",
+    border: "none",
+    borderRadius: 4,
+    cursor: "pointer",
   },
   content: {
     flex: 1,
@@ -206,7 +238,7 @@ const styles = {
     display: "inline-block",
     marginRight: 8,
     padding: "2px 8px",
-    backgroundColor: "#007bff",
+    backgroundColor: "#6a4fb3", // Rolesphere Purple
     color: "white",
     borderRadius: 12,
     fontSize: 12,
@@ -241,7 +273,7 @@ const styles = {
     fontSize: 14,
     borderRadius: 4,
     border: "none",
-    backgroundColor: "#007bff",
+    backgroundColor: "#6a4fb3",
     color: "white",
     cursor: "pointer",
   },
